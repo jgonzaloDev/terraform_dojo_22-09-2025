@@ -317,24 +317,24 @@ resource "azurerm_application_gateway" "appgw" {
   }
 
   backend_http_settings {
-    name                  = "setting-backend"
-    port                  = 443
-    protocol              = "Https"
-    request_timeout       = 20
-    cookie_based_affinity = "Disabled"
-    probe_name            = "probe-backend"
-    host_name             = "api-backend-dojo.azurewebsites.net"
+    name                                = "setting-backend"
+    port                                = 443
+    protocol                            = "Https"
+    request_timeout                     = 20
+    cookie_based_affinity               = "Disabled"
+    probe_name                          = "probe-backend"
+    host_name                           = "api-backend-dojo.azurewebsites.net"
     pick_host_name_from_backend_address = false
   }
 
   backend_http_settings {
-    name                  = "setting-frontend"
-    port                  = 443
-    protocol              = "Https"
-    request_timeout       = 20
-    cookie_based_affinity = "Disabled"
-    probe_name            = "probe-frontend"
-    host_name             = "front22.azurewebsites.net"
+    name                                = "setting-frontend"
+    port                                = 443
+    protocol                            = "Https"
+    request_timeout                     = 20
+    cookie_based_affinity               = "Disabled"
+    probe_name                          = "probe-frontend"
+    host_name                           = "front22.azurewebsites.net"
     pick_host_name_from_backend_address = false
   }
 
@@ -347,7 +347,7 @@ resource "azurerm_application_gateway" "appgw" {
     timeout             = 30
     unhealthy_threshold = 3
     match {
-      body         = ""
+      body        = ""
       status_code = ["200-399"]
     }
   }
@@ -361,7 +361,7 @@ resource "azurerm_application_gateway" "appgw" {
     timeout             = 30
     unhealthy_threshold = 3
     match {
-      body         = ""
+      body        = ""
       status_code = ["200-399"]
     }
   }
