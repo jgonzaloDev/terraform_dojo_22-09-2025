@@ -1,0 +1,32 @@
+# =====================
+# Terraform
+# =====================
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# =====================
+# Variables sensibles
+# =====================
+terraform.tfvars
+
+# =====================
+# Certificados (no subir nunca .pfx, .pem, etc.)
+# =====================
+certs/
+
+# =====================
+# Paquetes de despliegue
+# =====================
+deploy/
+
+# =====================
+# Logs, temporales y sistema
+# =====================
+*.log
+*.bak
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
