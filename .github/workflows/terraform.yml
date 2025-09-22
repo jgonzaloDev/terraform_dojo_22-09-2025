@@ -1,41 +1,54 @@
-name: 'Terraform Azure Deploy'
+name: 'Terraform Deploy'
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   terraform:
+    name: 'Terraform'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    # 1. Checkout el repo
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.9.5  # usa la versión que prefieras
+    # 2. Login en Azure usando los secrets
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: |
+          {
+            "clientId": "${{ secrets.TF_CLIENT_ID }}",
+            "clientSecret": "${{ secrets.TF_CLIENT_SECRET }}",
+            "subscriptionId": "${{ secrets.TF_SUBSCRIPTION_ID }}",
+            "tenantId": "${{ secrets.TF_TENANT_ID }}"
+          }
 
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.TF_CLIENT_ID }}
-          tenant-id: ${{ secrets.TF_TENANT_ID }}
-          subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
-          client-secret: ${{ secrets.TF_CLIENT_SECRET }}
+    # 3. Instalar Terraform
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.9.5   # puedes ajustar la versión si quieres
 
-      - name: Terraform Init
-        run: terraform init
+    # 4. Inicializar Terraform
+    - name: Terraform Init
+      run: terraform init
 
-      - name: Terraform Validate
-        run: terraform validate
+    # 5. Validar que la sintaxis es correcta
+    - name: Terraform Validate
+      run: terraform validate
 
-      - name: Terraform Plan
-        run: terraform plan -input=false
+    # 6. Plan de ejecución
+    - name: Terraform Plan
+      run: terraform plan -input=false
 
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -input=false
+    # 7. Aplicar cambios (solo cuando haces push a main)
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false
